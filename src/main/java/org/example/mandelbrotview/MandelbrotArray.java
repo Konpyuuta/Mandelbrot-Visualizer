@@ -29,7 +29,9 @@ public class MandelbrotArray {
     }
 
     public void setPixelValue(int x, int y, int value) {
-        // We apply the lock to the cell ...
+        // We apply the lock to the row ...
+        // As all threads are working on different rows it's not really necessary, the reason why I implemented it
+        // is for safety reasons
         synchronized (mandelbrotLocks[y]) {
             mandelbrotArray[x][y] = value;
         }

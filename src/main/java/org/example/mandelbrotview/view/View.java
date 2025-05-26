@@ -3,9 +3,6 @@
 package org.example.mandelbrotview.view;
 
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import org.example.mandelbrotview.view.components.MandelbrotCanvas;
 
 /** Abstract class that all View-designs of the main window have to extend.

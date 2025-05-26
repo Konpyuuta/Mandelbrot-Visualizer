@@ -11,10 +11,6 @@ import java.util.concurrent.Executors;
 
 public class MandelbrotVisualizer extends Application {
 
-    private final Integer WIDTH = 1200;
-
-    private final Integer HEIGHT = 700;
-
     public static ExecutorService executor = Executors.newFixedThreadPool(10);
 
 
