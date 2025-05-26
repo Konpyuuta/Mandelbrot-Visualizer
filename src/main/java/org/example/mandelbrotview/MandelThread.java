@@ -18,7 +18,7 @@ public class MandelThread implements Runnable {
 
     private final Integer MIN_ITERATION = 0;
 
-    private final Integer MAX_ITERATION = 999;
+    private final Integer MAX_ITERATION;
 
     private GuiFactory guiFactory;
 
@@ -28,11 +28,12 @@ public class MandelThread implements Runnable {
 
     private CountDownLatch countDownLatch;
 
-    public MandelThread(PixelRange widthRange, PixelRange heightRange, CountDownLatch latch) {
+    public MandelThread(PixelRange widthRange, PixelRange heightRange, CountDownLatch latch, Integer maxIterations) {
         this.widthRange = widthRange;
         this.heightRange = heightRange;
         guiFactory = new StyleFactory();
         this.countDownLatch = latch;
+        this.MAX_ITERATION = maxIterations;
     }
 
 
@@ -88,7 +89,7 @@ public class MandelThread implements Runnable {
             }
             z = z.multiply(z).add(z0);
         }
-        return new MandelbrotTuple(convertIterationToSmoothColor(z, 999), true);
+        return new MandelbrotTuple(convertIterationToSmoothColor(z, MAX_ITERATION), true);
     }
 
     private Boolean checkMagnitude(Complex z) {
@@ -106,7 +107,10 @@ public class MandelThread implements Runnable {
         Double value = (iteration + 1) - (Math.log(Math.log(absoluteValue)) / Math.log(2));
         // Normalization of the smooth value ..
 
-        Integer t = (int)Math.floor(255*Math.sqrt((value - MIN_ITERATION) / (MAX_ITERATION - MIN_ITERATION)));
+        Integer t = (int)Math.floor(255*(Math.sqrt((value - MIN_ITERATION) / (MAX_ITERATION - MIN_ITERATION))));
+        if(t > 255) {
+            t = 255;
+        }
         //System.out.println("red: " + t + " green: " + t + " blue: " + t);
         // Color.rgb(0, 0, t);
         return t;

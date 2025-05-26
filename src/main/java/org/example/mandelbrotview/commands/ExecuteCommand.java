@@ -1,7 +1,7 @@
 package org.example.mandelbrotview.commands;
 
 import org.apache.commons.math3.complex.Complex;
-import org.example.mandelbrotview.HelloApplication;
+import org.example.mandelbrotview.MandelbrotVisualizer;
 import org.example.mandelbrotview.MandelThread;
 import org.example.mandelbrotview.MandelbrotArray;
 import org.example.mandelbrotview.PixelRange;
@@ -9,8 +9,6 @@ import org.example.mandelbrotview.view.MainWindow;
 import org.example.mandelbrotview.view.components.MandelbrotToolbar;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  *
@@ -37,6 +35,12 @@ public class ExecuteCommand implements Command {
         ((MandelbrotToolbar)mainWindow.getToolBar()).switchFieldEnabling();
         this.amountOfThreads = ((MandelbrotToolbar)mainWindow.getToolBar()).getAmountOfThreads();
         this.maxIterations = ((MandelbrotToolbar)mainWindow.getToolBar()).getIterations();
+        if(amountOfThreads > 10 || amountOfThreads < 1) {
+            amountOfThreads = 1;
+        }
+        if(maxIterations < 1) {
+            maxIterations = 1000;
+        }
         CountDownLatch latch = new CountDownLatch(amountOfThreads);
         MandelbrotArray mandelbrotArray = MandelbrotArray.getInstance();
         Complex a = new Complex(0, -1);
@@ -61,7 +65,7 @@ public class ExecuteCommand implements Command {
                 heightRange = new PixelRange(startHeight, (i + 1) * heightArea);
             }
 
-            HelloApplication.executor.submit(new MandelThread(new PixelRange(0, 1200), new PixelRange(startHeight, ((i+1)*heightArea)), latch));
+            MandelbrotVisualizer.executor.submit(new MandelThread(new PixelRange(0, 1200), new PixelRange(startHeight, ((i+1)*heightArea)), latch, maxIterations-1));
             startWidth = ((i + 1) * widthArea) + 1;
             startHeight = ((i + 1) * heightArea);
         }
