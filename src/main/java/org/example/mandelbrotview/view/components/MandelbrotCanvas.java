@@ -35,8 +35,7 @@ public class MandelbrotCanvas extends Pane {
             for (int y = 0; y < image[x].length; y++) {
                 if(image[x][y] != null) {
                     graphicsContext.getPixelWriter().setColor(x, y, Color.rgb(0, 0, image[x][y]));
-                }
-
+                } 
             }
         }
     }

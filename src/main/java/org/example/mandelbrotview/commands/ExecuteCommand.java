@@ -47,26 +47,17 @@ public class ExecuteCommand implements Command {
         Complex b = new Complex(0, -1);
         Complex c = a.multiply(b);
 
-        Integer widthArea = (int)Math.floor(WIDTH / amountOfThreads);
         Integer heightArea = (int)Math.floor(HEIGHT / amountOfThreads);
-        Integer startWidth = 0;
         Integer startHeight = 0;
         System.out.println(Thread.currentThread().getName() + " started.");
         long tStart = System.nanoTime();
 
         for(int i = 0; i < amountOfThreads; i++) {
-            PixelRange widthRange;
-            PixelRange heightRange;
-            if(i + 1 >= amountOfThreads) {
-                widthRange = new PixelRange(startWidth, startWidth + WIDTH);
-                heightRange = new PixelRange(startHeight, startHeight + HEIGHT);
+            if ((i + 1) < amountOfThreads) {
+                MandelbrotVisualizer.executor.submit(new MandelThread(new PixelRange(0, 1200), new PixelRange(startHeight, ((i+1)*heightArea)), latch, maxIterations-1));
             } else {
-                widthRange = new PixelRange(startWidth, (i + 1) * widthArea);
-                heightRange = new PixelRange(startHeight, (i + 1) * heightArea);
+                MandelbrotVisualizer.executor.submit(new MandelThread(new PixelRange(0, 1200), new PixelRange(startHeight, HEIGHT), latch, maxIterations-1));
             }
-
-            MandelbrotVisualizer.executor.submit(new MandelThread(new PixelRange(0, 1200), new PixelRange(startHeight, ((i+1)*heightArea)), latch, maxIterations-1));
-            startWidth = ((i + 1) * widthArea) + 1;
             startHeight = ((i + 1) * heightArea);
         }
 

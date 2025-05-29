@@ -32,6 +32,8 @@ public class MandelbrotToolbar extends ToolBar {
         initComponents();
         setActions();
         spacer.setMinWidth(100);
+        ITERATION_FIELD_LABEL.setStyle("-fx-font-weight: bold;");
+        THREAD_FIELD_LABEL.setStyle("-fx-font-weight: bold;");
         super.getItems().addAll(EXEC_TOOL, spacer, THREAD_FIELD_LABEL, THREAD_FIELD, ITERATION_FIELD_LABEL, ITERATION_FIELD);
         super.setStyle("-fx-background-color: linear-gradient(to bottom, #fcfff4 0%,#dfe5d7 40%,#c1beb2 100%);");
     }
@@ -48,11 +50,21 @@ public class MandelbrotToolbar extends ToolBar {
     }
 
     public Integer getAmountOfThreads() {
-        return Integer.valueOf(THREAD_FIELD.getText());
+        String threads = THREAD_FIELD.getText();
+        try {
+            return Integer.valueOf(threads);
+        } catch (NumberFormatException e) {
+            return 1;
+        }
     }
 
     public Integer getIterations() {
-        return Integer.valueOf(ITERATION_FIELD.getText());
+        String iterations = ITERATION_FIELD.getText();
+        try {
+            return Integer.valueOf(iterations);
+        } catch (NumberFormatException e) {
+            return 1000;
+        }
     }
 
     public void switchFieldEnabling() {
